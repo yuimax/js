@@ -49,7 +49,7 @@
 
 async function test()
 {
-	const url = "./uptown.mp4";
+	const url = "../lib/gentleman.mp4";
 	const result = [];
 
 	bstart.disabled = true;
