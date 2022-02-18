@@ -1,4 +1,4 @@
 # yuimaxlab
-https://yuimax.github.io/yuimaxlab/
+https://yuimaxlab.netlify.app/
 
  
