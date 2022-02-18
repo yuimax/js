@@ -3,12 +3,18 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>yuimax/js/</title>
+    <title id="head_title">hostname/js/</title>
     <link rel="stylesheet" type="text/css" href="lib/style.css">
+    <script>
+      function init() {
+        head_title.innerHTML = location.host + "/js/";
+        body_title.innerHTML = "[" + location.host + "/js/]";
+      }
+    </script>
   </head>
-  <body>
+  <body onload="init();">
     <div id="main">
-      <h1>[yuimax.github.io/js/]</h1>
+      <h1 id="body_title">hostname/js/</h1>
       <ul style="line-height:150%;">
         <li><a href="../">[..]</a>
         <li><a href="speed-check/">speed-check</a>
