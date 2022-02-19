@@ -1,4 +1,6 @@
-﻿function download(url, ok, ng)
+﻿let break_flag = false;
+
+function download(url, ok, ng)
 {
 	let start_time = Date.now();
 	let next_sec = 0;
@@ -47,47 +49,61 @@
 	xhr.send(null);
 }
 
-async function test()
+async function start()
 {
-	const url = "../lib/gentleman.mp4";
+	const url = "../lib/" + (file.value ?? "gentleman") + ".mp4";
 	const result = [];
 
 	bstart.disabled = true;
+	bstop.disabled = false;
+	break_flag = false;
 	log.value = url + "\n";
+	log.value += "-".repeat(22) + "\n";
 
 	for (let i = 0; i < 10; i++) {
 		await new Promise((ok, ng) => {
 			download(url, ok, ng);
 		})
 		.then((megabps) => {
-			log.value += megabps.toFixed(2) + " [Mbps]\n";
+			log.value += (i + 1) + "/10: " + megabps.toFixed(2) + " [Mbps]\n";
 			result.push(megabps);
 		})
 		.catch((error_message) => {
 			log.value += error_message + "\n";
 		});
+		if (break_flag) break;
 	}
 
-	log.value += "-".repeat(20) + "\n";
+	log.value += "-".repeat(22) + "\n";
 	result.sort();
 	if (result.length >= 3) {
 		result.pop();
 		result.shift();
-		log.value += "except for min and max.\n";
+		log.value += "excluding max and min.\n";
 	}
 	if (result.length > 0) {
 		let ave = result.reduce((x, y) => x + y) / result.length;
-		log.value += "ave=" + ave.toFixed(2) + " [Mbps]\n";
+		log.value += "average " + ave.toFixed(2) + " [Mbps]\n";
 	}
 
+	bstop.disabled = true;
 	bstart.disabled = false;
+	break_flag = false;
+}
+
+function stop()
+{
+	bstop.disabled = true;
+	break_flag = true;
 }
 
 function init()
 {
 	log.value = "";
+	file.selectedIndex = 0;
 	progress.value = "";
 	time.value = "";
 	stat.value = "";
 	bstart.disabled = false;
+	bstop.disabled = true;
 }

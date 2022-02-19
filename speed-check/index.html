@@ -2,29 +2,36 @@
 <html>
 
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width" />
-<title>speed check</title>
-<link rel="stylesheet" type="text/css" href="../lib/style.css">
-<style>#main div { line-height:200%; padding-left:16px; }</style>
-<script src="script.js"></script>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>speed check</title>
+	<link rel="stylesheet" type="text/css" href="../lib/style.css">
+	<style>#main div { line-height:200%; padding-left:16px; }</style>
+	<script src="script.js"></script>
 </head>
 
 <body onLoad="init();">
-<div id="main">
-<h1>[DL speed check]</h1>
-<div style="float:left;">
-<textarea id="log" cols="28" rows="16"></textarea>
-</div>
-<div class="multicol" style="float:left; --w:80px;">
-<span>progress</span><input id="progress" size="20"><br>
-<span>time</span><input id="time" size="20"><br>
-<span>status</span><input id="stat" size="20"><br>
-<span>&nbsp;</span><button id="bstart" type="button" onClick="test();">START</button>
-</div>
-<div style="clear:both; height:10px;"></div>
-<div id="footer"><a href="../">/top/</a></div>
-</div>
+	<div id="main">
+		<h1>[DL speed check]</h1>
+		<div style="float:left;">
+			<textarea id="log" cols="28" rows="17"></textarea>
+		</div>
+		<div class="multicol" style="float:left; --w:80px;">
+			<span>select</span><select id="file">
+				<option value="gentleman">gentleman.mp4 - 1 [MB]</option>
+				<option value="uptown">uptown.mp4 - 6 [MB] </option>
+				<option value="toxic">toxic.mp4 - 18 [MB] </option>
+			</select><br>
+			<span>progress</span><input id="progress" size="20"><br>
+			<span>time</span><input id="time" size="20"><br>
+			<span>status</span><input id="stat" size="20"><br>
+			<span>&nbsp;</span>
+				<button id="bstart" type="button" onClick="start();">START</button>
+				<button id="bstop" type="button" onClick="stop();">STOP</button>
+		</div>
+		<div style="clear:both; height:10px;"></div>
+		<div id="footer"><a href="../">/top/</a></div>
+	</div>
 </body>
 
 </html>
