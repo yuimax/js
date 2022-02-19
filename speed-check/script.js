@@ -103,7 +103,7 @@ function stop()
 
 function init()
 {
-	vid.selectedIndex = 0;
+	file.selectedIndex = 0;
 	bstart.disabled = false;
 	bstop.disabled = true;
 }
