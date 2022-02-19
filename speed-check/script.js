@@ -66,7 +66,7 @@ async function start()
 			download(url, ok, ng);
 		})
 		.then((megabps) => {
-			log.value += i + "/10: " + megabps.toFixed(2) + " [Mbps]\n";
+			log.value += `${i}/${N}: ${megabps.toFixed(2)} [Mbps]\n`;
 			result.push(megabps);
 		})
 		.catch((error_message) => {
