@@ -60,18 +60,22 @@ async function start()
 	log.value = url + "\n";
 	log.value += "-".repeat(22) + "\n";
 
-	for (let i = 0; i < 10; i++) {
+	const N = 9;
+	for (let i = 1; i <= N; i++) {
 		await new Promise((ok, ng) => {
 			download(url, ok, ng);
 		})
 		.then((megabps) => {
-			log.value += (i + 1) + "/10: " + megabps.toFixed(2) + " [Mbps]\n";
+			log.value += i + "/10: " + megabps.toFixed(2) + " [Mbps]\n";
 			result.push(megabps);
 		})
 		.catch((error_message) => {
 			log.value += error_message + "\n";
 		});
-		if (break_flag) break;
+		if (break_flag) {
+			log.value += "stopped by user.\n";
+			break;
+		}
 	}
 
 	log.value += "-".repeat(22) + "\n";
