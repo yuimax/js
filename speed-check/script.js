@@ -103,11 +103,7 @@ function stop()
 
 function init()
 {
-	log.value = "";
-	file.selectedIndex = 0;
-	progress.value = "";
-	time.value = "";
-	stat.value = "";
+	vid.selectedIndex = 0;
 	bstart.disabled = false;
 	bstop.disabled = true;
 }
