@@ -60,7 +60,7 @@ async function start()
 	log.value = url + "\n";
 	log.value += "-".repeat(22) + "\n";
 
-	const N = 9;
+	const N = 10;
 	for (let i = 1; i <= N; i++) {
 		await new Promise((ok, ng) => {
 			download(url, ok, ng);
