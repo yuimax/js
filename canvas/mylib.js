@@ -1,11 +1,3 @@
-function getOffset(degree, distance)
-{
-    let t = Math.PI / 180 * degree;
-    let x = Math.sin(t) * distance;
-    let y = - Math.cos(t) * distance;
-    return [x, y];
-}
-
 function get_canvas(id)
 {
 	return document.querySelector("canvas#" + id);
@@ -22,6 +14,11 @@ function fillRect(g, x, y, width, height, color)
     g.fillStyle = color;
     g.fillRect(x, y, width, height);
     g.restore();
+}
+
+function clear(g, color)
+{
+    fillRect(g, 0, 0, g.canvas.width, g.canvas.height, color);
 }
 
 function drawCircle(g, x, y, radius, options)
@@ -110,11 +107,6 @@ function drawText(g, x, y, text, options)
     }
 }
 
-function clear(g, color)
-{
-    fillRect(g, 0, 0, g.canvas.width, g.canvas.height, color);
-}
-
 function create_imagelist()
 {
 	const my_images = [];
@@ -194,6 +186,7 @@ function fps_checker()
 			return (1000 / my_fps).toFixed(n);
 	}
 
+
 	return {
 		check: my_check,
 		tostr: my_tostr,
@@ -248,7 +241,7 @@ function anime_handler()
 function timing_checker(wait)
 {
 	let my_time = 0;
-	let my_wait = wait;
+	let my_wait = wait ?? 1000;
 
 	function my_check(callback)
 	{
@@ -265,9 +258,51 @@ function timing_checker(wait)
 	};
 }
 
+function laptime_watcher()
+{
+	let my_base_time = Date.now();
+	let my_total_msec = 0;
+	let my_idling_flag = true;
+
+	function my_laptime(stopflag = false)
+	{
+		if (!my_idling_flag) {
+			let dt = Date.now() - my_base_time;
+			my_total_msec += dt;
+			my_base_time += dt;
+			my_idling_flag = stopflag;
+		}
+		return my_total_msec;
+	}
+
+	function my_stop()
+	{
+		return my_laptime(true);
+	}
+
+	function my_start()
+	{
+		my_base_time = Date.now();
+		my_idling_flag = false;
+	}
+
+	function my_clear()
+	{
+		my_total_msec = 0;
+	}
+
+	return {
+		start:   my_start,
+		stop:    my_stop,
+		laptime: my_laptime,
+		clear:   my_clear,
+	};
+}
+
 const IMAGES = create_imagelist();
 const FPS = fps_checker();
 const ANIME = anime_handler();
+const TIMER = laptime_watcher();
 
 function init()
 {
