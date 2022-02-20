@@ -21,6 +21,6 @@ function draw_images()
 	}
 }
 
-return { draw: draw_images }
+return { draw: draw_images };
 
 })();

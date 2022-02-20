@@ -235,6 +235,7 @@ function anime_handler()
 		stop:    my_stop,
 		toggle:  my_toggle,
 		restart: my_restart,
+		get alive() { return my_alive; }
 	};
 }
 

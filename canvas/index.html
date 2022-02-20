@@ -9,9 +9,9 @@
 	<style>
 		table { margin: 0px 0px 0px 10px; }
 		th { text-align: center; padding: 0px; }
-		td { font-size: 90%; padding: 0px 8px 0px 8px; }
-		td.btn { padding: 2px; }
-		button { width: 120px; padding: 0px; }
+		td { font-size: 90%; padding: 4px 8px 0px 8px; }
+		td.btn { padding:0px; }
+		button { font-size:100%; width:96px; height:25px; margin:2px; padding: 0px; }
 	</style>
 	<script src="mylib.js"></script>
 	<script src="s01.js"></script>
@@ -29,10 +29,11 @@
 		<div style="margin-left:12px; float:left;">
 			<canvas id="img" width="384" height="288"></canvas>
 		</div>
-		<table  style="float:left;">
+		<table style="float:left;">
 			<tr><td>Shape<td class="btn"><button type="button" onclick="s01.draw();" disabled>draw shapes</button>
 			<tr><td>Image<td class="btn"><button type="button" onclick="s02.draw();" disabled>draw images</button>
-			<tr><td>Animation<td class="btn"><button type="button" onclick="s03.draw();" disabled>reflect box</button>
+			<tr><td>Animation<td class="btn"><button type="button" onclick="s03.draw();" disabled>move box</button>
+			<tr><td>Reset<td class="btn"><button type="button" onclick="s03.reset();" disabled>reset box</button>
 		</table>
 		<div style="clear:both;height:10px;"><br></div>
 		<div id="footer"><a href="../">/top/</a></div>

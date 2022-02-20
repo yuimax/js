@@ -43,6 +43,6 @@ function draw_shapes()
     drawText(g, x - 70, 80, "angle: 135 [deg]");
 }
 
-return { draw: draw_shapes }
+return { draw: draw_shapes };
 
 })();
