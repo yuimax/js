@@ -20,7 +20,7 @@ function orientation() {
     return screen.orientation.type + ' (angle=' + screen.orientation.angle + ')' ;
 }
 
-function init() {
+function check() {
 	print('scr_orie', orientation());
 	print('scr_size', size(screen.width, screen.height));
 	print('win_size', size(window.innerWidth, window.innerHeight));
@@ -33,5 +33,5 @@ function init() {
 	print('win_dp_ratio', window.devicePixelRatio);
 }
 
-window.onresize = init;
+window.onresize = check;
 

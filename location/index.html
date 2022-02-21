@@ -2,31 +2,48 @@
 <html>
 
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width" />
-	<title>location info</title>
-	<link rel="stylesheet" type="text/css" href="../lib/style.css">
-	<script src="script.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+<title>location info</title>
+<link rel="stylesheet" type="text/css" href="../lib/style.css">
 </head>
 
-<body onLoad="init();">
-	<div id="main">
-		<h1>[location info]</h1>
-		<table style="width:96%;">
-			<tr><th style="width:170px;">JavaScript<th>value
-			<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/href">location.href</a><td id="loc_href">
-			<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/protocol">location.protocol</a><td id="loc_protocol">
-			<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/hostname">location.hostname</a><td id="loc_hostname">
-			<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/port">location.port</a><td id="loc_port">
-			<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname">location.pathname</a><td id="loc_pathname">
-			<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/search">location.search</a><td id="loc_search">
-			<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/hash">location.hash</a><td id="loc_hash">
-			<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/host">location.host</a><td id="loc_host">
-			<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/origin">location.origin</a><td id="loc_origin">
-		</table>
-		<div style="clear:both; height:10px;"></div>
-		<div id="footer"><a href="../">/top/</a></div>
-	</div>
+<body>
+<div id="main">
+<h2>[location info]</h2>
+<table style="width:96%;">
+<tr><th style="width:170px;">JavaScript<th>value
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/href">location.href</a><td class="val" id="loc_href">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/protocol">location.protocol</a><td id="loc_protocol">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/hostname">location.hostname</a><td id="loc_hostname">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/port">location.port</a><td id="loc_port">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname">location.pathname</a><td class="val" id="loc_pathname">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/search">location.search</a><td id="loc_search">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/hash">location.hash</a><td id="loc_hash">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/host">location.host</a><td id="loc_host">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Location/origin">location.origin</a><td id="loc_origin">
+</table>
+<script>
+for (let name of [
+	'href',
+	'protocol',
+	'hostname',
+	'port',
+	'pathname',
+	'search',
+	'hash',
+	'host',
+	'origin',
+]) {
+	let td = document.querySelector("td#loc_" + name);
+	let val = location[name];
+	td.innerHTML = val;
+	if (val == undefined) { td.style.color = "darkred"; }
+}
+</script>
+<div style="clear:both; height:10px;"></div>
+<div id="footer"><a href="../">/top/</a></div>
+</div>
 </body>
 
 </html>

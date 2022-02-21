@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+<title>navigator info</title>
+<link rel="stylesheet" type="text/css" href="../lib/style.css">
+</head>
+
+<body>
+<div id="main">
+<h2>[navigator info]</h2>
+
+<table style="width:96%;">
+<tr><th style="width:256px;">JavaScript</th><th>value</th></tr>
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgent">navigator.userAgent</a><td class="val" id="nav_userAgent">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/vendor">navigator.vendor</a><td id="nav_vendor">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/buildID">navigator.buildID</a><td id="nav_buildID">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/hardwareConcurrency">navigator.hardwareConcurrency</a><td id="nav_hardwareConcurrency">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/maxTouchPoints">navigator.maxTouchPoints</a><td id="nav_maxTouchPoints">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/language">navigator.language</a><td id="nav_language">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/languages">navigator.languages</a><td id="nav_languages">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/onLine">navigator.onLine</a><td id="nav_onLine">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/cookieEnabled">navigator.cookieEnabled</a><td id="nav_cookieEnabled">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/webdriver">navigator.webdriver</a><td id="nav_webdriver">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/clipboard">navigator.clipboard</a><td id="nav_clipboard">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/serviceWorker">navigator.serviceWorker</a><td id="nav_serviceWorker">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mediaDevices">navigator.mediaDevices</a><td id="nav_mediaDevices">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/credentials">navigator.credentials</a><td id="nav_credentials">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/locks">navigator.locks</a><td id="nav_locks">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/storage">navigator.storage</a><td id="nav_storage">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/geolocation">navigator.geolocation</a><td id="nav_geolocation">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mediaSession">navigator.mediaSession</a><td id="nav_mediaSession">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mediaCapabilities">navigator.mediaCapabilities</a><td id="nav_mediaCapabilities">
+<tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/permissions">navigator.permissions</a><td id="nav_permissions">
+</table>
+
+<script>
+for (let name of [
+	'userAgent',
+	'vendor',
+	'buildID',
+	'hardwareConcurrency',
+	'maxTouchPoints',
+	'language',
+	'languages',
+	'onLine',
+	'cookieEnabled',
+	'webdriver',
+	'clipboard',
+	'serviceWorker',
+	'mediaDevices',
+	'credentials',
+	'locks',
+	'storage',
+	'geolocation',
+	'mediaSession',
+	'mediaCapabilities',
+	'permissions',
+]) {
+	let td = document.querySelector("td#nav_" + name);
+	let val = navigator[name];
+	td.innerHTML = val;
+	if (val == undefined) td.style.color = "darkred";
+}
+</script>
+
+<div style="height:10px;"><br></div>
+<div id="footer"><a href="../">/top/</a></div>
+</div>
+</body>
+
+</html>
