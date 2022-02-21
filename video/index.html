@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>video</title>
+<link rel="stylesheet" type="text/css" href="../lib/style.css">
+
+<style>
+div.float {
+	float:left;
+	margin:0px 0px 0px 12px;
+	padding:0px;
+}
+button {
+	margin:0px;
+	padding:2px 4px 2px 4px;
+}
+input {
+	margin:0px;
+	padding:2px 0px 2px 4px;
+}
+</style>
+
+<script>
+const movie_data = [
+	{	name: 'uptown',
+		music: '<a href="https://www.youtube.com/watch?v=E19BO_adrdU">Uptown Funk</a>',
+		artist: '<a href="https://www.youtube.com/channel/UCSY5V7BJSrxNvvBF0Drslow">Mark Ronson</a>',
+		model: '<a href="https://bowlroll.net/file/170989">unicustom</a>',
+		stage: '<a href="https://bowlroll.net/file/125409">kelorin jo BTA</a>',
+		motion: '<a href="https://bowlroll.net/file/156168">トッポ</a>',
+	},
+	{	name: 'toxic',
+		music: '<a href="https://www.youtube.com/watch?v=LOZuxwVk7TU">Toxic</a>',
+		artist: '<a href="https://www.youtube.com/channel/UCgffc95YDBlkGrBAJUHUmXQ">Britney Spears</a>',
+		model: '<a href="https://bowlroll.net/file/170989">unicustom</a>',
+		stage: '<a href="https://seiga.nicovideo.jp/seiga/im7540869">kelorin jo</a>',
+		motion: '<a href="https://www.nicovideo.jp/watch/sm24754758">HIKO</a>',
+	},
+	{	name: 'gentleman',
+		music: '<a href="https://www.youtube.com/watch?v=mzMVkZaufZU">GENTLEMAN</a>',
+		artist: '<a href="https://www.youtube.com/watch?v=ASO_zypdnsQ">PSY</a>',
+		model: '<a href="https://bowlroll.net/file/170989">unicustom</a>',
+		stage: '<a href="https://bowlroll.net/file/45400">結城</a>',
+		motion: '<a href="https://www.nicovideo.jp/watch/sm28364571">ろんちーの</a>',
+	},
+];
+
+let last_cmd = 'pause';
+
+function play_or_pause(cmd = null)
+{
+	if (last_cmd == 'play') {
+		vid.pause();
+		last_cmd = 'pause';
+		document.exitFullscreen();
+	}
+	else {
+		vid.play();
+		last_cmd = 'play';
+	}
+}
+
+function show_stat()
+{
+	if (vid.paused)  {
+		stat.value = 'status: pause';
+		stat.style.color = 'black';
+	}
+	else {
+		stat.value = 'status: play';
+		stat.style.color = 'black';
+	}
+}
+
+function show_pos()
+{
+	let t = vid.currentTime;
+	let minutes = Math.floor(t / 60).toFixed(0).padStart(2, '0');
+	let seconds = (t - minutes * 60).toFixed(3).padStart(6, '0');
+	pos.value = 'time: ' + minutes + ':' + seconds;
+	let rate = isNaN(vid.duration) ? 0 : (t / vid.duration);
+}
+
+function show_volume()
+{
+	let rate = vid.muted ? 0 : vid.volume;
+	vol.value = 'volume: ' + (rate * 100).toFixed(0) + '%';
+}
+
+function set_volume(percent)
+{
+	let v = Math.max(0, Math.min(1, percent / 100));
+	if (vid.volume != v) { vid.volume = v; }
+}
+
+function volume_updown(percent)
+{
+	set_volume(vid.volume * 100 + percent);
+}
+
+function init_files()
+{
+	let opts = '';
+	let n = movie_data.length;
+	for (let i = 0; i < n; i++) {
+		let movie = movie_data[i];
+		opts += '<option value="' + i + '">' + (i + 1) + ': ' + movie.name + '</option>\n';
+	}
+	files.innerHTML = opts;
+	files.selectedIndex = 0;
+	load_file();
+}
+
+function load_file()
+{
+	bplay.disabled = true;
+	bhead.disabled = true;
+	bnext.disabled = true;
+
+	let i = files.selectedIndex;
+	if (i >= 0 && i < files.length) {
+		let movie = movie_data[files.value];
+		memo.innerHTML
+			= '<table style="font-size:small; margin:0px; width:100%;">'
+			+ '<tr><th width="100">Music video<td>' + movie.music
+			+ '<tr><th>Original song<td>by ' + movie.artist
+			+ '<tr><th>MMD Model<td>by ' + movie.model
+			+ '<tr><th>MMD Stage<td>by ' + movie.stage
+			+ '<tr><th>MMD Motion<td>by ' + movie.motion
+			+ '</table>';
+		vid.autoplay = (last_cmd == 'play');
+		vid.src = '../lib/' + movie.name + '.mp4';
+	}
+	show_stat();
+	show_pos();
+}
+
+function go_next()
+{
+	if (files.length == 0) {
+		return;
+	}
+	const idx = (files.selectedIndex + 1) % files.length;
+	if (idx == 0) {
+		document.exitFullscreen();
+		last_cmd = 'pause';
+		vid.pause();
+	}
+	files.selectedIndex = idx;
+	load_file();
+}
+
+function on_vid_loadstart(e)
+{
+	stat.value = 'status: loading';
+	stat.style.color = 'red';
+}
+
+function on_vid_loadend(e)
+{
+	bplay.disabled = false;
+	bhead.disabled = false;
+	bnext.disabled = false;
+	
+	show_volume();
+	if (last_cmd == 'pause') {
+		vid.currentTime = 0;
+	}
+	show_stat();
+}
+
+function on_vid_seeking(e)
+{
+	bhead.disabled = true;
+	bnext.disabled = true;
+	show_stat();
+}
+
+function on_vid_seeked(e)
+{
+	bhead.disabled = false;
+	bnext.disabled = false;
+	show_pos();
+	show_stat();
+}
+
+function on_vid_error(e)
+{
+	if (vid.networkState == 3) {
+		alert('cannot load video.' + '\n' + vid.src);
+		on_vid_loadend();
+		go_next();
+	}
+}
+
+async function fullscreen()
+{
+	await vid.requestFullscreen();
+}
+
+function init()
+{
+	// files
+	init_files();
+	files.addEventListener('change', function(e) { load_file(); });
+	// video
+	vid.addEventListener('loadstart',    on_vid_loadstart);
+	vid.addEventListener('loadeddata',   on_vid_loadend);
+	vid.addEventListener('pause',        function(e) { show_stat(); });
+	vid.addEventListener('play',         function(e) { show_stat(); });
+	vid.addEventListener('seeked',       on_vid_seeked);
+	vid.addEventListener('seeking',      on_vid_seeking);
+	vid.addEventListener('timeupdate',   function(e) { show_pos(); });
+	vid.addEventListener('volumechange', function(e) { show_volume(); });
+	vid.addEventListener('ended',        function(e) { go_next(); });
+	vid.addEventListener('error',        on_vid_error);
+	// full screen button
+	bfull.addEventListener('click', function(e) { fullscreen(); });
+	// volume buttons
+	v_m10.addEventListener('click', function(e) { volume_updown(-10); });
+	v_m01.addEventListener('click', function(e) { volume_updown(-1);  });
+	v_p01.addEventListener('click', function(e) { volume_updown(1);   });
+	v_p10.addEventListener('click', function(e) { volume_updown(10);  });
+	// head button
+	bhead.addEventListener('click', function(e) { vid.currentTime = 0; });
+	// next button
+	bnext.addEventListener('click', function(e) { go_next(); });
+	// play/pause button
+	bplay.addEventListener('click', function(e) { play_or_pause(); });
+	show_stat();
+	show_volume();
+}
+
+</script>
+</head>
+
+<body onload="init();">
+<div id="main">
+
+<h2>[video]</h2>
+
+<p>
+* <a href="https://developer.mozilla.org/ja/docs/Web/API/HTMLVideoElement">HTMLVideoElement</a><br>
+* <a href="https://developer.mozilla.org/ja/docs/Web/API/HTMLMediaElement">HTMLMediaElement</a><br>
+</p>
+
+<div class="float">
+	<select id="files" style="width:320px;"></select><br>
+	<video id="vid" preload="auto" width="320" height="180"></video><br>
+	<div id="memo" style="float:left; width:320px; margin-bottom:8px;"></div>
+</div>
+<div class="float">
+	<input id="vol" type="text" style="width:138px;"><br>
+	<button id="v_m10" style="width:36px;" type="button">-10</button><!--
+--><button id="v_m01" style="width:36px;" type="button">-1</button><!--
+--><button id="v_p01" style="width:36px;" type="button">+1</button><!--
+--><button id="v_p10" style="width:36px;" type="button">+10</button><br>
+	<div style="height:10px;"><br></div>
+	<input id="pos" type="text" style="width:138px;"><br>
+	<button id="bhead" type="button" style="width:72px;">Head</button><!--
+--><button id="bnext" type="button" style="width:72px;">Next</button><br>
+	<div style="height:10px;"><br></div>
+	<input id="stat" type="text" style="width:138px;"><br>
+	<button id="bplay" type="button" style="width:144px;">Play / Pause</button><br>
+	<div style="height:10px;"><br></div>
+	<button id="bfull" type="button">full screen</button><br>
+</div>
+<div style="clear:both; height:8px;"><br></div>
+<div id="footer"><a href="../">/top/</a></div>
+</div>
+</body>
+</html>
