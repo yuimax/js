@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width">
 <title>video</title>
 <link rel="stylesheet" type="text/css" href="../lib/style.css">
-
 <style>
 div.float {
 	float:left;
@@ -22,8 +21,8 @@ input {
 	padding:2px 0px 2px 4px;
 }
 </style>
-
 <script>
+
 const movie_data = [
 	{	name: 'uptown',
 		music: '<a href="https://www.youtube.com/watch?v=E19BO_adrdU">Uptown Funk</a>',
@@ -50,7 +49,7 @@ const movie_data = [
 
 let last_cmd = 'pause';
 
-function play_or_pause(cmd = null)
+function play_or_pause()
 {
 	if (last_cmd == 'play') {
 		vid.pause();
@@ -65,12 +64,20 @@ function play_or_pause(cmd = null)
 
 function show_stat()
 {
-	if (vid.paused)  {
-		stat.value = 'status: pause';
+	if (!vid.paused)  {
+		stat.value = 'status: play';
 		stat.style.color = 'black';
 	}
+	else if (last_cmd == 'over') {
+		stat.value = 'status: over';
+		stat.style.color = 'red';
+	}
+	else if (last_cmd == 'break') {
+		stat.value = 'status: failed to load';
+		stat.style.color = 'red';
+	}
 	else {
-		stat.value = 'status: play';
+		stat.value = 'status: pause';
 		stat.style.color = 'black';
 	}
 }
@@ -79,9 +86,10 @@ function show_pos()
 {
 	let t = vid.currentTime;
 	let minutes = Math.floor(t / 60).toFixed(0).padStart(2, '0');
-	let seconds = (t - minutes * 60).toFixed(3).padStart(6, '0');
-	pos.value = 'time: ' + minutes + ':' + seconds;
+	let seconds = (t - minutes * 60).toFixed(0).padStart(2, '0');
 	let rate = isNaN(vid.duration) ? 0 : (t / vid.duration);
+	let percent = Math.floor(rate * 100 + 0.5);
+	pos.value = 'time: ' + minutes + ':' + seconds + ' (' + percent + '%)';
 }
 
 function show_volume()
@@ -96,7 +104,7 @@ function set_volume(percent)
 	if (vid.volume != v) { vid.volume = v; }
 }
 
-function volume_updown(percent)
+function updown_volume(percent)
 {
 	set_volume(vid.volume * 100 + percent);
 }
@@ -125,7 +133,7 @@ function load_file()
 		let movie = movie_data[files.value];
 		memo.innerHTML
 			= '<table style="font-size:small; margin:0px; width:100%;">'
-			+ '<tr><th width="100">Music video<td>' + movie.music
+			+ '<tr><th width="100">Music<td>' + movie.music
 			+ '<tr><th>Original song<td>by ' + movie.artist
 			+ '<tr><th>MMD Model<td>by ' + movie.model
 			+ '<tr><th>MMD Stage<td>by ' + movie.stage
@@ -146,7 +154,7 @@ function go_next()
 	const idx = (files.selectedIndex + 1) % files.length;
 	if (idx == 0) {
 		document.exitFullscreen();
-		last_cmd = 'pause';
+		last_cmd = 'over';
 		vid.pause();
 	}
 	files.selectedIndex = idx;
@@ -190,9 +198,14 @@ function on_vid_seeked(e)
 function on_vid_error(e)
 {
 	if (vid.networkState == 3) {
-		alert('cannot load video.' + '\n' + vid.src);
-		on_vid_loadend();
-		go_next();
+		if (confirm('CAN\'T LOAD :\n"' + vid.src + '".\n\nWANT TO FINISH?')) {
+			last_cmd = 'break';
+			on_vid_loadend();
+		}
+		else {
+			on_vid_loadend();
+			go_next();
+		}
 	}
 }
 
@@ -220,10 +233,10 @@ function init()
 	// full screen button
 	bfull.addEventListener('click', function(e) { fullscreen(); });
 	// volume buttons
-	v_m10.addEventListener('click', function(e) { volume_updown(-10); });
-	v_m01.addEventListener('click', function(e) { volume_updown(-1);  });
-	v_p01.addEventListener('click', function(e) { volume_updown(1);   });
-	v_p10.addEventListener('click', function(e) { volume_updown(10);  });
+	v_dn10.addEventListener('click', function(e) { updown_volume(-10); });
+	v_dn01.addEventListener('click', function(e) { updown_volume(-1);  });
+	v_up01.addEventListener('click', function(e) { updown_volume(1);   });
+	v_up10.addEventListener('click', function(e) { updown_volume(10);  });
 	// head button
 	bhead.addEventListener('click', function(e) { vid.currentTime = 0; });
 	// next button
@@ -233,20 +246,16 @@ function init()
 	show_stat();
 	show_volume();
 }
-
 </script>
 </head>
 
 <body onload="init();">
 <div id="main">
-
 <h2>[video]</h2>
-
 <p>
 * <a href="https://developer.mozilla.org/ja/docs/Web/API/HTMLVideoElement">HTMLVideoElement</a><br>
 * <a href="https://developer.mozilla.org/ja/docs/Web/API/HTMLMediaElement">HTMLMediaElement</a><br>
 </p>
-
 <div class="float">
 	<select id="files" style="width:320px;"></select><br>
 	<video id="vid" preload="auto" width="320" height="180"></video><br>
@@ -254,10 +263,10 @@ function init()
 </div>
 <div class="float">
 	<input id="vol" type="text" style="width:138px;"><br>
-	<button id="v_m10" style="width:36px;" type="button">-10</button><!--
---><button id="v_m01" style="width:36px;" type="button">-1</button><!--
---><button id="v_p01" style="width:36px;" type="button">+1</button><!--
---><button id="v_p10" style="width:36px;" type="button">+10</button><br>
+	<button id="v_dn10" style="width:36px;" type="button">-10</button><!--
+--><button id="v_dn01" style="width:36px;" type="button">-1</button><!--
+--><button id="v_up01" style="width:36px;" type="button">+1</button><!--
+--><button id="v_up10" style="width:36px;" type="button">+10</button><br>
 	<div style="height:10px;"><br></div>
 	<input id="pos" type="text" style="width:138px;"><br>
 	<button id="bhead" type="button" style="width:72px;">Head</button><!--
@@ -272,4 +281,5 @@ function init()
 <div id="footer"><a href="../">/top/</a></div>
 </div>
 </body>
+
 </html>
